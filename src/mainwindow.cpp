@@ -26,7 +26,17 @@ MainWindow::MainWindow(QWidget* parent) noexcept:
         button->setIcon(style()->standardIcon(static_cast<QStyle::StandardPixmap>(StandardPixmapList[i].value)));
         button->setToolTip(StandardPixmapList[i].name);
         connect(button, &QPushButton::clicked, [this, i, status](){
-            status->showMessage(tr("Copied '%1'").arg(StandardPixmapList[i].name), 5000);
+            qApp->clipboard()->setText(StandardPixmapList[i].name);
+
+            if (qApp->clipboard()->text() == StandardPixmapList[i].name)
+            {
+                status->showMessage(tr("Copied '%1'").arg(StandardPixmapList[i].name), 3000);
+            }
+            else
+            {
+                status->showMessage(tr("Copy Failed"), 3000);
+            }
+            
         });
         layout->addWidget(button, i / rowSize, i % rowSize);
     }
